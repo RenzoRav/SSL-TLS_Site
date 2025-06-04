@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSL/TLS - Segurança na Internet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideUp 0.8s ease-out forwards;
+        }
+
+        .slide:nth-child(even) {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #fff, #f0f8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide h2 {
+            font-size: 2.5em;
+            margin-bottom: 25px;
+            color: #ffd700;
+        }
+
+        .slide h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #87ceeb;
+        }
+
+        .slide p, .slide li {
+            font-size: 1.3em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .diagram-container {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .handshake-demo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .client, .server {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            width: 200px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+        }
+
+        .client {
+            background: rgba(72, 201, 176, 0.3);
+        }
+
+        .server {
+            background: rgba(155, 89, 182, 0.3);
+        }
+
+        .arrow {
+            font-size: 2em;
+            margin: 0 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .security-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .version-timeline {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .version-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px;
+            text-align: center;
+            min-width: 150px;
+            transition: all 0.3s ease;
+        }
+
+        .version-box.deprecated {
+            background: rgba(255, 0, 0, 0.3);
+            opacity: 0.6;
+        }
+
+        .version-box.current {
+            background: rgba(0, 255, 0, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+        }
+
+        .browser-demo {
+            background: #2c3e50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            color: white;
+            font-family: monospace;
+        }
+
+        .address-bar {
+            background: #34495e;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .lock-icon {
+            color: #2ecc71;
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .url {
+            color: #3498db;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffd700, #ff6b6b);
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .slide h1 { font-size: 2.5em; }
+            .slide h2 { font-size: 2em; }
+            .handshake-demo { flex-direction: column; }
+            .arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <div class="container">
+        <!-- Slide 1: Título -->
+        <div class="slide">
+            <h1>🔒 SSL/TLS</h1>
+            <h3>Segurança na Comunicação Digital</h3>
+            <p>Protocolos essenciais para navegação segura na internet</p>
+        </div>
+
+        <!-- Slide 2: O que é SSL/TLS -->
+        <div class="slide">
+            <h2>O que é SSL/TLS?</h2>
+            <div class="security-features">
+                <div class="feature-card">
+                    <span class="feature-icon">🔐</span>
+                    <h3>SSL</h3>
+                    <p>Secure Sockets Layer - Protocolo original de segurança</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🛡️</span>
+                    <h3>TLS</h3>
+                    <p>Transport Layer Security - Evolução mais segura do SSL</p>
+                </div>
+            </div>
+            <p>Protocolos criptográficos que garantem comunicação segura entre cliente e servidor</p>
+        </div>
+
+        <!-- Slide 3: Principais Funções -->
+        <div class="slide">
+            <h2>Principais Funções de Segurança</h2>
+            <div class="security-features">
+                <div class="feature-card">
+                    <span class="feature-icon">🔒</span>
+                    <h3>Confidencialidade</h3>
+                    <p>Dados criptografados durante transmissão</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">✅</span>
+                    <h3>Integridade</h3>
+                    <p>Verificação se dados não foram alterados</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🆔</span>
+                    <h3>Autenticação</h3>
+                    <p>Confirmação da identidade do servidor</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Como Funciona - Handshake -->
+        <div class="slide">
+            <h2>Como Funciona o Handshake SSL/TLS</h2>
+            <div class="diagram-container">
+                <div class="handshake-demo">
+                    <div class="client">
+                        <h3>📱 Cliente</h3>
+                        <p>Navegador</p>
+                    </div>
+                    <div class="arrow">🔄</div>
+                    <div class="server">
+                        <h3>🖥️ Servidor</h3>
+                        <p>Site Web</p>
+                    </div>
+                </div>
+                <div style="text-align: left; margin-top: 20px;">
+                    <p><strong>1.</strong> Cliente envia "Hello" com versões e algoritmos suportados</p>
+                    <p><strong>2.</strong> Servidor responde com certificado e algoritmo escolhido</p>
+                    <p><strong>3.</strong> Cliente verifica certificado e gera chave de sessão</p>
+                    <p><strong>4.</strong> Ambos confirmam e iniciam comunicação criptografada</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Versões -->
+        <div class="slide">
+            <h2>Evolução das Versões</h2>
+            <div class="version-timeline">
+                <div class="version-box deprecated">
+                    <h3>SSL 2.0/3.0</h3>
+                    <p>❌ Obsoleto</p>
+                    <p>Vulnerável</p>
+                </div>
+                <div class="version-box deprecated">
+                    <h3>TLS 1.0/1.1</h3>
+                    <p>⚠️ Descontinuado</p>
+                    <p>Inseguro</p>
+                </div>
+                <div class="version-box">
+                    <h3>TLS 1.2</h3>
+                    <p>✅ Amplamente usado</p>
+                    <p>Seguro</p>
+                </div>
+                <div class="version-box current">
+                    <h3>TLS 1.3</h3>
+                    <p>🚀 Mais recente</p>
+                    <p>Mais rápido e seguro</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Indicadores Visuais -->
+        <div class="slide">
+            <h2>Como Identificar uma Conexão Segura</h2>
+            <div class="browser-demo">
+                <h3>✅ Conexão Segura (HTTPS)</h3>
+                <div class="address-bar">
+                    <span class="lock-icon">🔒</span>
+                    <span class="url">https://meusite.com.br</span>
+                </div>
+                <p>• Cadeado fechado na barra de endereços</p>
+                <p>• URL começa com "https://"</p>
+                <p>• Certificado válido e confiável</p>
+            </div>
+            <div class="browser-demo" style="background: #e74c3c;">
+                <h3>❌ Conexão Insegura (HTTP)</h3>
+                <div class="address-bar" style="background: #c0392b;">
+                    <span style="color: #f39c12; margin-right: 10px;">⚠️</span>
+                    <span class="url">http://siteinseguro.com</span>
+                </div>
+                <p>• Aviso de "Não seguro"</p>
+                <p>• URL começa apenas com "http://"</p>
+                <p>• Dados transmitidos sem criptografia</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Importância -->
+        <div class="slide">
+            <h2>Por que é Importante?</h2>
+            <div class="security-features">
+                <div class="feature-card">
+                    <span class="feature-icon">💳</span>
+                    <h3>Transações Financeiras</h3>
+                    <p>Proteção de dados bancários e cartões</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🔑</span>
+                    <h3>Login e Senhas</h3>
+                    <p>Segurança no acesso a contas</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📱</span>
+                    <h3>Dados Pessoais</h3>
+                    <p>Proteção de informações privadas</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🛒</span>
+                    <h3>E-commerce</h3>
+                    <p>Compras online seguras</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Conclusão -->
+        <div class="slide">
+            <h2>Conclusão</h2>
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 15px; max-width: 800px;">
+                <h3>SSL/TLS é fundamental para:</h3>
+                <p>✅ Proteger dados sensíveis na internet</p>
+                <p>✅ Garantir confiança entre usuários e sites</p>
+                <p>✅ Prevenir ataques e interceptações</p>
+                <p>✅ Estabelecer um padrão de segurança digital</p>
+                <br>
+                <p><strong>Sempre verifique o cadeado 🔒 antes de inserir informações importantes!</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="scrollToTop()">↑ Início</button>
+        <button class="nav-btn" onclick="window.print()">🖨️ Imprimir</button>
+    </div>
+
+    <script>
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Smooth scroll to top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0s';
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.slide').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === ' ') {
+                window.scrollBy(0, window.innerHeight * 0.8);
+            } else if (e.key === 'ArrowUp') {
+                window.scrollBy(0, -window.innerHeight * 0.8);
+            } else if (e.key === 'Home') {
+                scrollToTop();
+            }
+        });
+    </script>
+</body>
+</html>
