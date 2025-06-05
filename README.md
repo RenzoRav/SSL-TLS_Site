@@ -48,3 +48,7 @@
 8. **Conclusão**
 
    * Mensagem final: sempre verificar o cadeado 🔒 antes de inserir informações sensíveis.
+  
+**Link do site**
+
+  https://renzorav.github.io/SSL-TLS_Site/ssl_presentation.html
