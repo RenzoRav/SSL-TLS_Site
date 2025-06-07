@@ -1,54 +1,82 @@
-# README – SSL/TLS 
+# 🔐 SSL/TLS - Segurança na Comunicação Digital
 
-## Visão Geral
+## O que é SSL/TLS?
+- **SSL (Secure Sockets Layer)**: protocolo original de segurança.
+- **TLS (Transport Layer Security)**: versão mais segura e moderna.
+- Ambos garantem **criptografia** e **autenticação** entre cliente e servidor.
 
-* Apresentação sobre SSL/TLS e sua importância na segurança de conexões web.
+---
 
-## Estrutura dos Slides
+## ⚙️ Principais Funções
 
-1. **Título**
+| Função              | Descrição                                              |
+|---------------------|--------------------------------------------------------|
+| Confidencialidade | Protege os dados durante a transmissão com criptografia |
+| Integridade       | Garante que os dados não foram alterados               |
+| Autenticação      | Verifica a identidade do servidor                      |
 
-   * Introdução ao tema: “SSL/TLS – Segurança na Comunicação Digital”.
+---
 
-2. **O que é SSL/TLS**
+## 🤝 Como Funciona o Handshake
 
-   * Definição rápida: protocolos criptográficos para conexões seguras (SSL: legado; TLS: versão atual).
+1. Cliente envia “Hello” com versões e algoritmos suportados
+2. Servidor responde com certificado e algoritmo escolhido
+3. Cliente valida certificado e gera chave de sessão
+4. Ambos estabelecem canal criptografado
 
-3. **Funções de Segurança**
+### Exemplo visual:
+![Handshake SSL/TLS](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*FV5F1zGU9zrMKTHkRRqX1g.png)
 
-   * **Confidencialidade:** dados criptografados.
-   * **Integridade:** prevenção de alterações não autorizadas.
-   * **Autenticação:** validação de identidade do servidor.
+---
 
-4. **Handshake SSL/TLS**
+## 📅 Evolução das Versões
 
-   * Passos básicos:
+| Versão       | Estado       | Observações                          |
+|--------------|--------------|--------------------------------------|
+| SSL 2.0/3.0  | ❌ Obsoleto   | Vulnerável e descontinuado           |
+| TLS 1.0/1.1  | ⚠️ Inseguro   | Inadequado para uso atual            |
+| TLS 1.2      | ✅ Estável    | Amplamente utilizado atualmente      |
+| TLS 1.3      | 🚀 Atual      | Mais rápido e seguro                 |
 
-     1. Cliente envia “Hello” (algoritmos suportados).
-     2. Servidor responde com certificado.
-     3. Cliente verifica certificado e gera chave de sessão.
-     4. Comunicação criptografada inicia.
+---
 
-5. **Evolução das Versões**
+## Como identificar uma conexão segura
 
-   * **SSL 2/3:** obsoleto.
-   * **TLS 1.0/1.1:** descontinuado.
-   * **TLS 1.2:** amplamente usado.
-   * **TLS 1.3:** mais seguro e eficiente.
+| HTTPS (Seguro)                                   | HTTP (Inseguro)                                   |
+|--------------------------------------------------|---------------------------------------------------|
+| Cadeado na barra de endereços                    |  Aviso de “Não seguro”                          |
+| URL começa com `https://`                        | URL começa com `http://`                          |
+| Certificado digital válido e confiável           | Dados transmitidos sem criptografia              |
 
-6. **Como Identificar Conexão Segura**
+---
 
-   * Cadeado na barra de endereço / URL “https\://”.
-   * Sites sem HTTPS exibem aviso de “Não seguro”.
+## 💡 Importância
 
-7. **Por que é Importante?**
+- **Transações Financeiras**: Protege dados bancários e de cartão.
+- **Senhas e Login**: Garante segurança no acesso a contas.
+- **Dados Pessoais**: Protege privacidade e identidade.
+- **E-commerce**: Essencial para segurança em compras online.
 
-   * Protege transações financeiras, logins, dados pessoais e e-commerce.
+---
 
-8. **Conclusão**
+## ✅ Conclusão
 
-   * Mensagem final: sempre verificar o cadeado 🔒 antes de inserir informações sensíveis.
-  
-**Link do site**
+- SSL/TLS é essencial para garantir **segurança, confiança e privacidade**.
+- Protege contra **interceptações, ataques man-in-the-middle e fraudes**.
+- Sempre verifique o **cadeado 🔒** antes de inserir informações sensíveis.
 
-  https://renzorav.github.io/SSL-TLS_Site/ssl_presentation.html
+---
+
+## Feito por:
+
+- João Pedro Balduino  
+- Enzo Santos  
+- José Alves  
+
+---
+
+## 🔗 Fontes e referências visuais
+
+- [🔗 Cloudflare - How TLS Works](https://www.cloudflare.com/learning/ssl/what-is-ssl/)  
+- [🔗 Medium - TLS Handshake Explained](https://medium.com/@koushik.sivaraman/tls-handshake-a-pictorial-guide-e6e2f2f08b8c)  
+- [🔗 Mozilla - Transport Layer Security (TLS)](https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security)
